@@ -1,4 +1,4 @@
-=== Custom 404 Error Page: Unilimited designs and color ===
+=== Custom 404 Error Page: Unilimited designs and colors ===
 
 Contributors: WpThemeShock
 Donate link: 
