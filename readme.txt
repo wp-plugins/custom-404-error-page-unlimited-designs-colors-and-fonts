@@ -10,7 +10,7 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Custom 404, creates a 404 page that is set to the default one of your WordPress installation.
-You can change almost every aspect of this page, background color, font size, style and so on from the dashboard.
+This page is fully customizable from the dashboard.
 
 == Description ==
 
