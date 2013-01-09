@@ -4,7 +4,7 @@
     Plugin Name: Customize your 404 Error Page for Wordpress
     Plugin URI: http://wpthemegenerator.com
     Description: Create and Customize your Own 404 Error Page in your wordpress installation
-    Version: 1.0
+    Version: 1.1
     Author: WP Theme Generator
     Author URI: http://wpthemegenerator.com
 */
