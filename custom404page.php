@@ -1,4 +1,4 @@
-<?php get_header() ?>
+<?php get_header(); http_response_code( 404 ); //var_dump( http_response_code() ); ?>
 <?php
 $bgcolor=  urlencode(get_option('custom404_selected_color'));
 $text_color=urlencode(get_option('custom404_selected_textcolor'));
