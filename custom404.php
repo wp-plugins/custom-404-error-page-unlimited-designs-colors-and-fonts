@@ -121,18 +121,6 @@ function custom404_settings_page() {
     $color_sel=get_option('custom404_selected_color');
 ?>
 <?php
-    //vars for css get passing
-    $bgcolor=  urlencode(get_option('custom404_selected_color'));
-    $text_color=urlencode(get_option('custom404_selected_textcolor'));
-    $title_color=urlencode(get_option('custom404_selected_titlecolor'));
-    $title_font=urlencode(get_option('custom404_title_font'));
-    $text_font=urlencode(get_option('custom404_text_font'));
-    $title_font_size=urlencode(get_option('custom404_title_font_size'));
-    $text_font_size=urlencode(get_option('custom404_text_font_size'));
-    $img_select=urlencode(get_option('custom404_selected_img'));
-    $pattern_select=urlencode(get_option('custom404_selected_pattern'));
-?>
-<?php
     //font types for titles and content texts
     $fonts=array(
         'Yanone Kaffeesatz'=>'YanoneKaffeesatz'
@@ -193,7 +181,10 @@ function custom404_settings_page() {
 <link href='http://fonts.googleapis.com/css?family=<?php echo urlencode($name); ?>' rel='stylesheet' type='text/css' />
 <?php endforeach; ?>
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__)."css/colorpicker.css" ?>" />
-<link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__)."css/custom404css.php?title_color=$title_color&title_font_size=$title_font_size&text_font_size=$text_font_size&pattern_select=$pattern_select&img_select=$img_select&backcolor=$bgcolor&title_font=$title_font&text_color=$text_color&text_font=$text_font" ?>" />
+<?php
+    // Get the template with plugin styles
+    c_404_load_view( 'css/custom-404-style.php' );
+?>
 <script type="text/javascript">
     var wp_path="<?php echo get_bloginfo('wpurl'); ?>";
     var cur_color="<?php echo get_option('custom404_selected_color'); ?>";
