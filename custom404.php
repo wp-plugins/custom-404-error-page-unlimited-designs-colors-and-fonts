@@ -4,18 +4,40 @@
     Plugin Name: Customize your 404 Error Page for Wordpress
     Plugin URI: http://wpthemegenerator.com
     Description: Create and Customize your Own 404 Error Page in your wordpress installation
-    Version: 1.1
+    Version: 1.2
     Author: WP Theme Generator
     Author URI: http://wpthemegenerator.com
 */
 if ( is_admin() ) {
-    register_uninstall_hook(plugin_dir_path(__FILE__).'/custom404.php', 'wptg_er_de_register_settings');    
+    register_uninstall_hook(plugin_dir_path(__FILE__).'/custom404.php', 'wptg_er_de_register_settings');
     register_activation_hook(plugin_dir_path(__FILE__).'/custom404.php', 'wptg_er_pre_register_settings');
+}
+
+
+/**
+* Define constants
+*/
+define( CUSTOM_404_PLUGIN_ROOT, dirname( __FILE__ ).  '/' );
+
+/**
+* Loads a view
+* @param { string } file to retrieve
+* @param { arr } variables to pass to the view
+* @return { null }
+*/
+function c_404_load_view( $filename, $data = null  )  {
+
+    if ( is_array( $data ) ) {
+        extract( $data );
+    }
+
+    require_once( CUSTOM_404_PLUGIN_ROOT . $filename );
 
 }
+
 function wptg_er_pre_register_settings() {
         $opt=get_option('custom404_content_text');
-        if(empty($opt)){            
+        if(empty($opt)){
             update_option('custom404_content_title', "Enter a text here!");
             update_option('custom404_content_text', "Enter a text here!");
             update_option( 'custom404_link_text_1','' );
@@ -71,13 +93,13 @@ function create_404_menu() {
     add_menu_page(__('Customize your 404 Error Page - Plugin Options','custom404int'), 'Custom 404 Opt.', 'administrator', __FILE__, 'custom404_settings_page',plugins_url('/img/tg.png', __FILE__));
 }
 function register_mysettings() {
-	//register our settings	
-	register_setting( 'wptg_custom404-settings-group', 'custom404_selected_color' );
+	    // Register our settings
+	    register_setting( 'wptg_custom404-settings-group', 'custom404_selected_color' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_selected_img' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_selected_textcolor' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_selected_titlecolor' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_selected_pattern' );
-	register_setting( 'wptg_custom404-settings-group', 'custom404_content_text' );
+	    register_setting( 'wptg_custom404-settings-group', 'custom404_content_text' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_content_text' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_link_text_1' );
         register_setting( 'wptg_custom404-settings-group', 'custom404_link_href_1' );
@@ -98,7 +120,7 @@ function register_mysettings() {
 function custom404_settings_page() {
     $color_sel=get_option('custom404_selected_color');
 ?>
-<?php 
+<?php
     //vars for css get passing
     $bgcolor=  urlencode(get_option('custom404_selected_color'));
     $text_color=urlencode(get_option('custom404_selected_textcolor'));
@@ -110,8 +132,8 @@ function custom404_settings_page() {
     $img_select=urlencode(get_option('custom404_selected_img'));
     $pattern_select=urlencode(get_option('custom404_selected_pattern'));
 ?>
-<?php 
-    //font types for titles and content texts   
+<?php
+    //font types for titles and content texts
     $fonts=array(
         'Yanone Kaffeesatz'=>'YanoneKaffeesatz'
         ,'Wire One'=>'WireOne'
@@ -173,7 +195,7 @@ function custom404_settings_page() {
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__)."css/colorpicker.css" ?>" />
 <link rel="stylesheet" href="<?php echo plugin_dir_url(__FILE__)."css/custom404css.php?title_color=$title_color&title_font_size=$title_font_size&text_font_size=$text_font_size&pattern_select=$pattern_select&img_select=$img_select&backcolor=$bgcolor&title_font=$title_font&text_color=$text_color&text_font=$text_font" ?>" />
 <script type="text/javascript">
-    var wp_path="<?php echo get_bloginfo('wpurl'); ?>";    
+    var wp_path="<?php echo get_bloginfo('wpurl'); ?>";
     var cur_color="<?php echo get_option('custom404_selected_color'); ?>";
     var cur_textcolor="<?php echo get_option('custom404_selected_textcolor'); ?>";
     var cur_titlecolor="<?php echo get_option('custom404_selected_titlecolor'); ?>";
@@ -185,21 +207,21 @@ function custom404_settings_page() {
 <script type="text/javascript" src="<?php echo plugin_dir_url(__FILE__)."js/colorpicker.js" ?>"></script>
 <script type="text/javascript" src="<?php echo plugin_dir_url(__FILE__)."js/custom404.js" ?>"></script>
 <form method="post" id="frmcustom" name="frmcustom" onsubmit="saveoptions('#frmcustom');return false;" action="options.php">
-    <div class="wrap">        
+    <div class="wrap">
         <h2><img src="<?php echo plugin_dir_url(__FILE__)."img/icon.png"; ?>" />&nbsp;<?php echo __('Customize your 404 Error Page - Plugin Options','custom404int'); ?></h2>
         <div style="height: 20px">
             <div class="updated_custom" id="message_custom001" style="display: none;">&nbsp;</div>
         </div>
         <br />
-        <?php do_settings_fields('wptg_custom404-settings-group','custom404_settings_page'); ?>   
+        <?php do_settings_fields('wptg_custom404-settings-group','custom404_settings_page'); ?>
         <div id="dashboard-widgets-wrap">
             <div id="dashboard-widgets" class="metabox-holder">
                 <div id="postbox-container-1" class="postbox-container" style="width:50%;">
                     <div id="normal-sortables" class="meta-box-sortables ui-sortable">
-                        <div class="postbox ">                            
+                        <div class="postbox ">
                             <h3 style="cursor: default"><span>Powered by: <a href="http://www.wpthemegenerator.com" target="blank">WordPress Theme Generator</a></span></h3>
                             <div class="inside">
-                                <div>                                    
+                                <div>
                                     <p>
                                         <?php echo __('One theme, a thousand posibilities: Create amazing and unlimited themes by playing with 1000+ pre-designed elements (or uploading your own designs) and then download in fully working WP or HTML/CSS.','custom404int'); ?>
                                     </p>
@@ -209,12 +231,12 @@ function custom404_settings_page() {
                                 </div>
                             </div>
                         </div>
-                        <div class="postbox ">                            
+                        <div class="postbox ">
                             <h3 style="cursor: default"><span><?php echo __('Background decoration Settings:','custom404int');?></span></h3>
                             <div class="inside">
                                 <table>
                                     <tr valign="top">
-                                        <td><?php echo __('Background Color:','custom404int');?></td>        
+                                        <td><?php echo __('Background Color:','custom404int');?></td>
                                         <td  style="width: 190px">
                                             <select id="color_select" name="color_select">
                                             <?php
@@ -223,7 +245,7 @@ function custom404_settings_page() {
                                                 $name1="";
                                                 $s=false;
                                                 foreach ($colors as $name=>$value) {
-                                                    $opt_img=get_option("custom404_selected_color");               
+                                                    $opt_img=get_option("custom404_selected_color");
                                                     $selec=$value==$opt_img?"selected":"";
                                                     $name1=$selec=='selected'?$name:'';
                                                     if($name1!=''){
@@ -241,7 +263,7 @@ function custom404_settings_page() {
                                             <div id="color_selector" class="colorSelector" <?php echo $n; ?> ><div style="background-color: <?php echo get_option('custom404_selected_color'); ?>">&nbsp;&nbsp;&nbsp;</div></div>
                                             <input type="hidden" name="color_select_value" id="color_select_value" value="<?php echo get_option('custom404_selected_color') ?>" />
                                         </td>
-                                    </tr>        
+                                    </tr>
                                     <tr valign="top">
                                         <td><?php echo __('Background Pattern:','custom404int');?></td>
                                         <td colspan="2">
@@ -250,11 +272,11 @@ function custom404_settings_page() {
                                                 $dir=  plugin_dir_path(__FILE__)."patterns/";
                                                 $fold_content=array();
                                                 if (@$handle = opendir($dir)) {
-                                                    $count_img=0;                        
+                                                    $count_img=0;
                                                     while (false !== ($file = readdir($handle))) {
                                                         $exten=  explode(".", $file);
-                                                        if($exten[count($exten)-1]=='png'||$exten[count($exten)-1]=='gif'||$exten[count($exten)-1]=='jpg'||$exten[count($exten)-1]=='bmp'||$exten[count($exten)-1]=='emf'||$exten[count($exten)-1]=='jpeg'){                                                            
-                                                            $fold_content[]=$file;                                                            
+                                                        if($exten[count($exten)-1]=='png'||$exten[count($exten)-1]=='gif'||$exten[count($exten)-1]=='jpg'||$exten[count($exten)-1]=='bmp'||$exten[count($exten)-1]=='emf'||$exten[count($exten)-1]=='jpeg'){
+                                                            $fold_content[]=$file;
                                                             //echo "<label><input type='radio' onclick='select_img(this)' custom-value='$file' name='img_select' $selec id='img_select'><img class='image_box' title='$file' width='95' height='62' src='$file' />&nbsp;</label>";
                                                             /*if($count_img==9){
                                                                 $count_img=0;
@@ -292,7 +314,7 @@ function custom404_settings_page() {
                                                     while (false !== ($file = readdir($handle))) {
                                                         $exten=  explode(".", $file);
                                                         if($exten[count($exten)-1]=='png'||$exten[count($exten)-1]=='gif'||$exten[count($exten)-1]=='jpg'||$exten[count($exten)-1]=='bmp'||$exten[count($exten)-1]=='emf'||$exten[count($exten)-1]=='jpeg'){
-                                                            $fold_content[]=$file;                                                            
+                                                            $fold_content[]=$file;
                                                             //echo "<label><input type='radio' onclick='select_img(this)' custom-value='$file' name='img_select' $selec id='img_select'><img class='image_box' title='$file' width='95' height='62' src='$file' />&nbsp;</label>";
                                                             /*if($count_img==9){
                                                                 $count_img=0;
@@ -318,9 +340,9 @@ function custom404_settings_page() {
                                         </td>
                                     </tr>
                                 </table>
-                            </div>                        
+                            </div>
                         </div>
-                        <div class="postbox ">                            
+                        <div class="postbox ">
                             <h3 style="cursor: default"><span><?php echo __('Useful Links Settings:','custom404int');?></span></h3>
                             <div class="inside">
                                 <table>
@@ -355,7 +377,7 @@ function custom404_settings_page() {
                                     <tr valign="top">
                                         <td><?php echo __("Web page for the link 4 (optional):",'custom404int')?></td>
                                         <td colspan="2"><input type="text" name="link_href_4" title="<?php echo __("Web page for the link 4 (optional):",'custom404int')?>" maxlength="100" size="40" id="link_href_4" value="<?php echo get_option('custom404_link_href_4'); ?>" /></td>
-                                    </tr>   
+                                    </tr>
                                     <tr valign="top">
                                         <td><?php echo __("Text for the link 5 (optional):",'custom404int')?></td>
                                         <td colspan="2"><input type="text" name="link_text_5" title="<?php echo __("Text for the link 5 (optional):",'custom404int')?>" maxlength="100" size="40" id="link_text_5" value="<?php echo get_option('custom404_link_text_5'); ?>" /></td>
@@ -366,7 +388,7 @@ function custom404_settings_page() {
                                     </tr>
                                 </table>
                             </div>
-                        </div>                        
+                        </div>
                         <p>
                             <input type="submit" class="button-primary" value="<?php echo __("Save Changes",'custom404int');?>" />
                         </p>
@@ -374,7 +396,7 @@ function custom404_settings_page() {
                 </div>
                 <div id="postbox-container-2" class="postbox-container" style="width:50%;">
                     <div id="normal-sortables" class="meta-box-sortables ui-sortable">
-                        <div class="postbox ">                            
+                        <div class="postbox ">
                             <h3 style="cursor: default"><span><?php echo __("Text and Font Settings:",'custom404int');?></span></h3>
                             <div class="inside">
                                 <table>
@@ -397,7 +419,7 @@ function custom404_settings_page() {
                                         <td width='250px'><?php echo __("Title Font Size (in pixels):",'custom404int')?></td>
                                         <td colspan="2">
                                             <select name="title_font_size" id="title_font_size">
-                                                <?php for ($i=20;$i<=40;$i++): ?> 
+                                                <?php for ($i=20;$i<=40;$i++): ?>
                                                     <?php $selected=$i==get_option("custom404_title_font_size")?"selected":""; ?>
                                                     <option <?php echo $selected; ?> custom-value="<?php echo $name ?>" value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                                 <?php endfor; ?>
@@ -408,12 +430,12 @@ function custom404_settings_page() {
                                         <td><?php echo __("Title color:",'custom404int');?></td>
                                         <td  style="width: 190px">
                                             <select id="titlecolor_select" name="titlecolor_select">
-                                            <?php           
-                                                $opt_img=get_option("custom404_selected_titlecolor"); 
-                                                $colors=array(__("Default",'custom404int')=>"#ffffff");                    
+                                            <?php
+                                                $opt_img=get_option("custom404_selected_titlecolor");
+                                                $colors=array(__("Default",'custom404int')=>"#ffffff");
                                                 $s=false;
                                                 $name1="";
-                                                foreach ($colors as $name=>$value) {                        
+                                                foreach ($colors as $name=>$value) {
                                                     $selec=$value==$opt_img?"selected":"";
                                                     $name1=$selec=='selected'?$name:'';
                                                     if($name1!=''){
@@ -455,7 +477,7 @@ function custom404_settings_page() {
                                         <td width='250px'><?php echo __("Text Font Size (in pixels):",'custom404int')?></td>
                                         <td colspan="2">
                                             <select name="text_font_size" id="text_font_size">
-                                                <?php for ($i=10;$i<=25;$i++): ?> 
+                                                <?php for ($i=10;$i<=25;$i++): ?>
                                                     <?php $selected=$i==  get_option("custom404_text_font_size")?"selected":""; ?>
                                                     <option <?php echo $selected; ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
                                                 <?php endfor; ?>
@@ -463,12 +485,12 @@ function custom404_settings_page() {
                                         </td>
                                     </tr>
                                     <tr valign="top">
-                                        <td><?php echo __("Text Color:",'custom404int');?></td>        
+                                        <td><?php echo __("Text Color:",'custom404int');?></td>
                                         <td  style="width: 190px">
                                             <select id="textcolor_select" name="textcolor_select">
-                                            <?php           
-                                                $opt_img=get_option("custom404_selected_textcolor"); 
-                                                $colors=array(__("Default",'custom404int')=>"#ffffff");                   
+                                            <?php
+                                                $opt_img=get_option("custom404_selected_textcolor");
+                                                $colors=array(__("Default",'custom404int')=>"#ffffff");
                                                 $s=false;
                                                 $name1="";
                                                 foreach ($colors as $name=>$value) {
@@ -497,18 +519,18 @@ function custom404_settings_page() {
                                 </table>
                             </div>
                         </div>
-                        <div class="postbox ">                            
+                        <div class="postbox ">
                             <h3 style="cursor: default"><span><?php echo __("Categories Settings:",'custom404int');?></span></h3>
                             <div class="inside">
                                 <table>
                                     <tr valign="top">
                                         <td><?php echo __("Category to view at useful posts:",'custom404int');?></td>
                                         <td colspan="2">
-                                            <?php 
+                                            <?php
                                                 $args = array(
                                                     'show_option_all'    => __('All Categories','custom404int'),
                                                     'show_option_none'   => '',
-                                                    'orderby'            => 'ID', 
+                                                    'orderby'            => 'ID',
                                                     'order'              => 'ASC',
                                                     'show_count'         => 0,
                                                     'hide_empty'         => 0,
@@ -516,7 +538,7 @@ function custom404_settings_page() {
                                                     'exclude'            => '',
                                                     'echo'               => 1,
                                                     'selected'           => get_option('custom404_catid_view'),
-                                                    'hierarchical'       => 0, 
+                                                    'hierarchical'       => 0,
                                                     'name'               => 'selected_category',
                                                     'id'                 => 'selected_category',
                                                     'class'              => 'postform',
@@ -531,12 +553,12 @@ function custom404_settings_page() {
                                     </tr>
                                 </table>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>     
-    </div>        
+        </div>
+    </div>
 </form>
 <div class="loading-spinner"><img src="<?php echo plugin_dir_url(__FILE__)."img/spinner.gif" ?>" title="Loading..." /></div>
 <div id="dialog1" style="display: none"></div>
@@ -547,7 +569,7 @@ function wptg_er_save_plg_options(){
     $status=0;
     $message="";
     load_plugin_textdomain('custom404int', false, basename( dirname( __FILE__ ) ) . '/languages' );
-    if(count($_POST)>0){        
+    if(count($_POST)>0){
         update_option('custom404_content_title', stripslashes($_POST['content_title']));
         update_option('custom404_content_text', stripslashes($_POST['content_text']));
         update_option('custom404_selected_img', $_POST['img_select_value']);
@@ -585,7 +607,7 @@ function do_template_redirect()
     if(is_404()){
         header("HTTP/1.0 200 OK");
         include plugin_dir_path(__FILE__)."/custom404page.php" ;
-        die();        
+        die();
     }
 }
 add_action('template_redirect', 'do_template_redirect' );
